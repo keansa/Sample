@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<project name="fax" basedir="." default="build">
+<property name="src.dir" value="src"/>
+<property name="build.dir" value="${src.dir}/classes"/>
+<property file="build.properties" />
+	<path id="master-classpath">
+      <fileset dir="${src.dir}/lib">
+         <include name="*.jar"/>
+      </fileset>
+      <pathelement path="${build.dir}"/>
+	</path>
+	<target name="build" description="new build">
+		<mkdir dir="${build.dir}"/>
+		<javac destdir="${build.dir}" source="1.8" target="1.8" debug="true" failonerror="true">
+			<src path="${src.dir}" />
+			<exclude name="**/myclass3.java" />
+			<classpath refid="master-classpath" />
+		</javac>
+	</target>
+	<target name="build-jar" depends="build" description="build the app.jar file">
+		<mkdir dir="${src.dir}/jar" />
+		<jar destfile="${src.dir}/jar/app.jar"
+			 basedir="${build.dir}"
+			 includes="**/*.class"
+			 excludes="**/myclass3.class" >
+			 
+			<manifest>
+				<attribute name="Main-Class" value="${mainclass}" /> 
+			</manifest>
+		</jar>
+	</target>
+	<target name="build-war" depends="build-jar">
+		<war destfile="${src.dir}/appwar.war"  webxml="${src.dir}/web.xml">
+			<fileset dir="${src.dir}/webcontent" >
+				<include name="**/*.*"/>
+			</fileset>
+			<lib dir="${src.dir}/lib">
+			</lib>
+			<classes dir="${build.dir}" />
+			
+		</war>
+	
+	</target>
+	<target name="clean" description="deleted the .class file">
+		<delete>
+			<fileset dir="${build.dir}">
+				<include name="**/*.class" />
+			</fileset>
+			<fileset dir="${src.dir}/jar">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset dir="${src.dir}">
+				<include name="**/*.war" />
+			</fileset>
+		</delete>
+	</target>
+	
+
+
+</project>
