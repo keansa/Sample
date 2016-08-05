@@ -29,7 +29,7 @@
 			</manifest>
 		</jar>
 	</target>
-	<target name="build-war" depends="build-jar">
+	<target name="build-war" depends="clean,build-jar">
 		<war destfile="${src.dir}/appwar.war"  webxml="${src.dir}/web.xml">
 			<fileset dir="${src.dir}/webcontent" >
 				<include name="**/*.*"/>
